@@ -1,0 +1,365 @@
+var http = require('http');
+var fs = require('fs');
+http.createServer(function (req, res) {
+  fs.readFile('welcome.html', function(err, data) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    res.end();
+  });
+}).listen(8080);
+
+
+<html>
+<body>
+<h1>Welcome</h1>
+</body>
+
+</html>
+
+
+var fs = require('fs');
+
+fs.appendFile('mynewfile1.txt', 'Hello content!', function (err) {
+  if (err) throw err;
+  console.log('Saved!');
+});
+
+fs.appendFile('mynewfile2.txt', ' This is my text.', function (err) {
+  if (err) throw err;
+  console.log('Updated!');
+});
+
+fs.open('mynewfile2.txt', 'w', function (err, file) {
+  if (err) throw err;
+  console.log('Saved!');
+});
+
+
+fs.writeFile('mynewfile3.txt', 'Hello content!', function (err) {
+  if (err) throw err;
+  console.log('Saved!');
+});
+
+
+fs.unlink('mynewfile2.txt', function (err) {
+  if (err) throw err;
+  console.log('File deleted!');
+});
+
+
+fs.rename('mynewfile1.txt', 'myrenamedfile.txt', function (err) {
+  if (err) throw err;
+  console.log('File Renamed!');
+});			
+
+https://nodejs.org/api/fs.html
+
+
+var fs = require('fs')
+
+function copy(source,destination){
+    fs.readFile(source,(err,data)=>{
+        fs.writeFile(destination,data,(err)=>{
+            if(err){
+                console.log("Failed")
+            }else{
+                console.log("Saved/Copied")
+            }
+        })
+    })
+}
+
+copy("welcome.html","copy.html")
+
+
+const axios = require('axios')
+const fs = require('fs')
+axios.get("https://jsonplaceholder.typicode.com/todos")
+.then(data =>{
+   fs.appendFile("todos.txt",JSON.stringify(data.data),err=>{
+    if(err){
+        console.log("Error",err)
+    }else{
+        console.log("Saved")
+    }
+   })
+})
+
+
+
+const axios = require("axios");
+const fs = require("fs");
+
+const fetchAndSave = (url, file) =>
+  axios.get(url).then((data) => {
+    fs.appendFile(file, JSON.stringify(data.data), (err) => {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Saved");
+      }
+    });
+  });
+
+  fetchAndSave('https://jsonplaceholder.typicode.com/comments','comments.txt')
+
+
+
+
+var http = require('http');
+var url = require('url');
+const axios = require('axios')
+
+http.createServer(function (req, res) {
+  axios.get("https://jsonplaceholder.typicode.com/todos").then((data) => {
+    let upper = JSON.stringify(data.data).toUpperCase()
+    res.writeHead(200, {'Content-Type': 'text/html'}); 
+    res.end(upper)
+  })
+
+}).listen(8080);
+
+
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+
+http.createServer(function (req, res) {
+  var q = url.parse(req.url, true).query;
+
+  var filename =  q.pathname;
+  fs.readFile(filename, function(err, data) {
+    if (err) {
+      console.log(err)
+      res.writeHead(404, {'Content-Type': 'text/html'});
+      return res.end("404 Not Found");
+    }  
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    return res.end();
+  });
+}).listen(8080);
+
+
+
+<html>
+<body>
+<h1> Hello </h1>
+</body>
+
+</html>
+
+<html>
+<body>
+<h1>
+Welcome
+</h1>
+
+</body>
+
+</html>
+
+
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+
+http.createServer(function (req, res) {
+  var q = url.parse(req.url, true).query;
+
+  var filename =  q.pathname;
+  console.log('filename',filename)
+  if(filename){
+  fs.readFile(filename, function(err, data) {
+    if (err) {
+      console.log(err)
+      res.writeHead(404, {'Content-Type': 'text/html'});
+      return res.end("404 Not Found");
+    }  
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    return res.end();
+  });
+} else{
+    return  res.end("file not found")
+}
+
+}).listen(8080);
+
+
+console.log('Starting index.js');
+const fs = require('fs');
+const fun = require('./function.js');
+var noteObj = fun.addNote();
+console.log('noteObj'+noteObj);
+var add = fun.addNumber(3,4);
+console.log('add'+add);
+
+
+
+module.exports.addNote = () => {
+console.log('addNote');
+return 'New note';
+};
+
+
+module.exports.addNumber=(a,b) =>{
+	return a + b;	
+};
+
+
+
+
+var http = require('http');
+var url = require('url');
+var fs = require('fs');
+
+http.createServer(function (req, res) {
+  var q = url.parse(req.url, true).query;
+  if(q.action === 'showform' ){
+    fs.readFile("form.html", function(err, data) {
+        if (err) {
+          console.log(err)
+          res.writeHead(404, {'Content-Type': 'text/html'});
+          return res.end("404 Not Found");
+        }  
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(data);
+        return res.end();
+      });
+  }
+  else {
+    if(q.action === 'submitform' ){
+
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.write(JSON.stringify(q));
+        return res.end();
+    }
+  }
+
+  
+}).listen(8080);
+
+
+<html>
+<body>
+    <form>
+        <label>Enter name <input name="name"/>
+            <br/>
+            <label>Enter age <input name="age" type="number"/>
+                <br/>
+                <input type="hidden" name="action" value="submitform"/>
+                <button type="submit">Submit</button>
+
+   
+    </form>
+</body>
+</html>
+
+
+
+var http = require("http");
+var url = require("url");
+var fs = require("fs");
+const sendResponse = (filename, res) => {
+  fs.readFile(filename, function (err, data) {
+    if (err) {
+      console.log(err);
+      res.writeHead(404, { "Content-Type": "text/html" });
+      return res.end("404 Not Found");
+    }
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.write(data);
+    return res.end();
+  });
+};
+
+const sendJson = (json, res) => {
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.write(JSON.stringify(json));
+  return res.end();
+};
+http
+  .createServer(function (req, res) {
+    var q = url.parse(req.url, true).query;
+    if (q.action === "showlogin") {
+      return sendResponse("login.html", res);
+    }
+
+    if (q.action === "showform") {
+      return sendResponse("form.html", res);
+    } else {
+      if (q.action === "submitform") {
+        return sendJson(q, res);
+      } else if (q.action === "login") {
+        if (q.username === q.password) {
+          return sendJson({ success: true }, res);
+        } else {
+          return sendJson({ success: false }, res);
+        }
+      }
+    }
+  })
+  .listen(8080);
+
+<html>
+<body>
+    <form>
+        <label>Enter username <input name="username"/>
+            <br/>
+            <label>Enter password <input name="password" type="password"/>
+                <br/>
+                <input type="hidden" name="action" value="login"/>
+                <button type="submit">Login</button>
+
+   
+    </form>
+</body>
+</html>
+
+var http = require("http");
+var url = require("url");
+var fs = require("fs");
+const sendResponse = (filename, res) => {
+  fs.readFile(filename, function (err, data) {
+    if (err) {
+      console.log(err);
+      res.writeHead(404, { "Content-Type": "text/html" });
+      return res.end("404 Not Found");
+    }
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.write(data);
+    return res.end();
+  });
+};
+
+const sendJson = (json, res) => {
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.write(JSON.stringify(json));
+  return res.end();
+};
+http
+  .createServer(function (req, res) {
+    var q = url.parse(req.url, true).query;
+    if (q.action === "showlogin") {
+      return sendResponse("login.html", res);
+    }
+
+    if (q.action === "showform") {
+      return sendResponse("form.html", res);
+    } else {
+      if (q.action === "submitform") {
+        return sendJson(q, res);
+      } else if (q.action === "login") {
+        if (q.username === q.password) {
+          return sendJson({ success: true }, res);
+        } else {
+          return sendJson({ success: false }, res);
+        }
+      }
+    }
+  })
+  .listen(8080);
+
+
+
